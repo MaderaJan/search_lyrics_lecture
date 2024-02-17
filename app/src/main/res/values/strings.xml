@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Lyrics Search</string>
+
+    <string name="enter_search_text">Enter search text</string>
+    <string name="nothing_was_found">Nothing was found</string>
+
+    <string name="search_form_select_an_album">Select an Album</string>
+    <string name="search_form_select_an_artist">Select an Artist</string>
+    <string name="search_form_select_an_song">Select a Song</string>
+    <string name="search_form_get_lyrics">Get Lyrics</string>
+</resources>
