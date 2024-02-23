@@ -5,6 +5,8 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/lyricsListFragment">
 
+<!--    // TODO 4. Navigation -->
+
     <fragment
         android:id="@+id/lyricsListFragment"
         android:name="com.maderajan.muni.lyricsseach.ui.lyricslist.LyricsListFragment"

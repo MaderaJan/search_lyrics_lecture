@@ -5,16 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.maderajan.muni.lyricsseach.databinding.ActivityMainBinding
 
-// TODO 1. Activity
-// TODO 11. Resources
 class MainActivity : AppCompatActivity() {
 
+    // TODO 1. Activity Binding
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // TODO 2. Activity set layout
         setContentView(binding.root)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)

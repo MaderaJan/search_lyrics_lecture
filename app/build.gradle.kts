@@ -6,7 +6,6 @@ plugins {
     id("kotlin-parcelize")
 }
 
-// TODO 9. Module Level build.gradle.kts
 android {
     namespace = "com.maderajan.muni.lyricsseach"
     compileSdk = 34
@@ -45,7 +44,6 @@ android {
     }
 }
 
-// TODO 10. Dependencies
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
