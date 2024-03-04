@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.maderajan.muni.lyricsseach.databinding.FragmentLyricsListBinding
 import com.maderajan.muni.lyricsseach.repository.LyricsRepository
 
@@ -14,7 +16,8 @@ class LyricsListFragment : Fragment() {
 
     private val adapter = LyricsAdapter(
         onClick = { lyrics ->
-            // TODO 10. (S) -> Zobrazit Toast, který vypíše { artist: songName }
+            Toast.makeText(context, "${lyrics.artistName} + ${lyrics.songName}", Toast.LENGTH_LONG)
+                .show()
         }
     )
 
@@ -26,12 +29,9 @@ class LyricsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // TODO 5. LayoutManager
-//        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        // TODO 6. Adapter -> Recycler
-//        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = adapter
 
-        // TODO 6.1 Adapter submitList
         val lyricsRepository = LyricsRepository()
         adapter.submitList(lyricsRepository.getFakeLyrics())
     }

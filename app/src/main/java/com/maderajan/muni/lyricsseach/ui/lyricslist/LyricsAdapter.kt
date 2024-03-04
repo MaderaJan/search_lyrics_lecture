@@ -5,10 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.RoundedCornersTransformation
+import com.maderajan.muni.lyricsseach.R
 import com.maderajan.muni.lyricsseach.data.LyricsData
 import com.maderajan.muni.lyricsseach.databinding.ItemListBinding
 
-// TODO 2. Adapter
 class LyricsAdapter(
     private val onClick: (LyricsData) -> Unit
 ) : ListAdapter<LyricsData, LyricsViewHolder>(LyricsDiffUtil()) {
@@ -22,25 +24,24 @@ class LyricsAdapter(
     }
 }
 
-// TODO 3. ViewHolder
 class LyricsViewHolder(private val binding: ItemListBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: LyricsData, onClick: (LyricsData) -> Unit) {
-        // TODO 8. (S) bindování dat do view
-            // - (hint) obrázek -> coverImageView (použití coil)
-            // - (hint) bind songName a artistName (view.text) -> songNameTextView, artistNameTextView
-            // - (hint) click callback (onClick(item)) -> binding.root.setOnClickListener
+        binding.coverImageView.load(item.coverUrl) {
+            crossfade(true)
+            placeholder(R.drawable.ic_image_placeholder)
+            transformations(RoundedCornersTransformation(16f))
+        }
 
-        //  TODO 8.1 (S) kód pro získání obráku z URL (stačí odkomentovat)
-//        binding.coverImageView.load(item.coverUrl) {
-//            crossfade(true)
-//            placeholder(R.drawable.ic_image_placeholder)
-//            transformations(RoundedCornersTransformation(16f))
-//        }
+        binding.songNameTextView.text = item.songName
+        binding.artistNameTextView.text = item.artistName
+
+        binding.root.setOnClickListener {
+            onClick(item)
+        }
     }
 }
 
-// TODO 4. DiffUtil
 class LyricsDiffUtil : DiffUtil.ItemCallback<LyricsData>() {
 
     override fun areItemsTheSame(oldItem: LyricsData, newItem: LyricsData): Boolean =

@@ -1,6 +1,5 @@
 package com.maderajan.muni.lyricsseach.data
 
-// TODO 1. Lyrics Data
 data class LyricsData(
     val id: String,
     val songName: String,
