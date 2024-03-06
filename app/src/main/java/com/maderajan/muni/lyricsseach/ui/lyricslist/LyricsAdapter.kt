@@ -24,7 +24,9 @@ class LyricsAdapter(
     }
 }
 
-class LyricsViewHolder(private val binding: ItemListBinding) : RecyclerView.ViewHolder(binding.root) {
+class LyricsViewHolder(
+    private val binding: ItemListBinding
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: LyricsData, onClick: (LyricsData) -> Unit) {
         binding.coverImageView.load(item.coverUrl) {

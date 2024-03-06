@@ -11,4 +11,7 @@
         android:label="LyricsListFragment"
         tools:layout="@layout/fragment_lyrics_list" />
 
+<!--    // TODO 1.1 (S) Přidání SearchLyricsFragmentu -->
+<!--    // TODO 1.2 (S) Vytvoření action do SearchLyrics-->
+
 </navigation>
