@@ -9,9 +9,17 @@
         android:id="@+id/lyricsListFragment"
         android:name="com.maderajan.muni.lyricsseach.ui.lyricslist.LyricsListFragment"
         android:label="LyricsListFragment"
-        tools:layout="@layout/fragment_lyrics_list" />
+        tools:layout="@layout/fragment_lyrics_list" >
 
-<!--    // TODO 1.1 (S) Přidání SearchLyricsFragmentu -->
-<!--    // TODO 1.2 (S) Vytvoření action do SearchLyrics-->
+        <action
+            android:id="@+id/action_lyricsListFragment_to_searchLyricsFragment"
+            app:destination="@id/searchLyricsFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/searchLyricsFragment"
+        android:name="com.maderajan.muni.lyricsseach.ui.searchlyrics.SearchLyricsFragment"
+        android:label="SearchLyricsFragment" />
 
 </navigation>
