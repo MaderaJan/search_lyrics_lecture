@@ -24,6 +24,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -36,11 +37,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import com.maderajan.muni.lyricsseach.R
+import com.maderajan.muni.lyricsseach.data.SearchResult
+import com.maderajan.muni.lyricsseach.data.SearchType
+import com.maderajan.muni.lyricsseach.ui.search.SearchBottomSheet
 import com.maderajan.muni.lyricsseach.ui.theme.black300
 import com.maderajan.muni.lyricsseach.ui.theme.yellow500
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class SearchLyricsFragment : Fragment() {
+
+    private val artistFlow = MutableStateFlow<SearchResult?>(null)
+    private val albumFlow = MutableStateFlow<SearchResult?>(null)
+    private val songFlow = MutableStateFlow<SearchResult?>(null)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
         ComposeView(requireContext()).apply {
@@ -50,12 +60,17 @@ class SearchLyricsFragment : Fragment() {
                     modifier = Modifier.padding(16.dp)
                 ) {
 
+                    val artist = artistFlow.collectAsState().value
+                    val album = albumFlow.collectAsState().value
+                    val song = songFlow.collectAsState().value
+
                     FormField(
                         icon = painterResource(id = R.drawable.ic_group),
-                        text = stringResource(id = R.string.search_form_select_an_artist),
+                        text = artist?.name ?: stringResource(id = R.string.search_form_select_an_artist),
                         isEnabled = true,
-                        isFilled = false,
+                        isFilled = artist != null,
                         onClick = {
+                            navigateToSearch(SearchType.ARTIST)
                         }
                     )
 
@@ -63,10 +78,11 @@ class SearchLyricsFragment : Fragment() {
 
                     FormField(
                         icon = painterResource(id = R.drawable.ic_record),
-                        text = stringResource(id = R.string.search_form_select_an_album),
-                        isEnabled = true,
-                        isFilled = false,
+                        text = album?.name ?: stringResource(id = R.string.search_form_select_an_album),
+                        isEnabled = artist != null,
+                        isFilled = album != null,
                         onClick = {
+                            navigateToSearch(SearchType.ALBUM)
                         }
                     )
 
@@ -74,10 +90,11 @@ class SearchLyricsFragment : Fragment() {
 
                     FormField(
                         icon = painterResource(id = R.drawable.ic_song),
-                        text = stringResource(id = R.string.search_form_select_an_song),
-                        isEnabled = true,
-                        isFilled = false,
+                        text = song?.name ?: stringResource(id = R.string.search_form_select_an_song),
+                        isEnabled = artist != null && album != null,
+                        isFilled = song != null,
                         onClick = {
+                            navigateToSearch(SearchType.SONGS)
                         }
                     )
 
@@ -91,105 +108,127 @@ class SearchLyricsFragment : Fragment() {
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
                         },
-                        enabled = true
+                        enabled = artist != null && album != null && song != null
                     ) {
                         Text(
                             text = stringResource(id = R.string.search_form_get_lyrics),
                             color = Color.Black
                         )
+
                     }
                 }
             }
         }
-}
 
-@Composable
-fun FormField(
-    icon: Painter,
-    text: String,
-    isEnabled: Boolean,
-    isFilled: Boolean,
-    onClick: () -> Unit
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                if (isEnabled) {
-                    onClick()
-                }
-            }
-            .background(Color.Black, shape = RoundedCornerShape(8.dp))
-            .padding(8.dp)
-            .alpha(if (isEnabled) 1f else 0.5f)
+    private fun navigateToSearch(searchType: SearchType) {
+        //  TODO 2.1 (S) Navigation with SearchType
+    }
+
+    // TODO 2.2 Naslouchání nad Resultem
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setFragmentResultListener(SearchType.ARTIST.name) { _, bundle ->
+            artistFlow.value = bundle.getParcelable(SearchBottomSheet.SEARCH_KEY)
+        }
+
+        setFragmentResultListener(SearchType.ALBUM.name) { _, bundle ->
+            albumFlow.value = bundle.getParcelable(SearchBottomSheet.SEARCH_KEY)
+        }
+
+        setFragmentResultListener(SearchType.SONGS.name) { _, bundle ->
+            songFlow.value = bundle.getParcelable(SearchBottomSheet.SEARCH_KEY)
+        }
+    }
+
+    @Composable
+    fun FormField(
+        icon: Painter,
+        text: String,
+        isEnabled: Boolean,
+        isFilled: Boolean,
+        onClick: () -> Unit
     ) {
-        Icon(
-            painter = icon,
-            contentDescription = "",
-            tint = Color.White,
-            modifier = Modifier.padding(8.dp)
-        )
-
-        Text(
-            text = text,
-            color = Color.White,
-            modifier = Modifier.padding(start = 8.dp)
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Box(
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(end = 8.dp)
-                .size(24.dp)
-                .background(color = if (isFilled) yellow500 else Color.Transparent, shape = CircleShape)
-                .border(
-                    width = 1.dp, color = black300, shape = CircleShape
-                )
-                .padding(4.dp)
+                .fillMaxWidth()
+                .clickable {
+                    if (isEnabled) {
+                        onClick()
+                    }
+                }
+                .background(Color.Black, shape = RoundedCornerShape(8.dp))
+                .padding(8.dp)
+                .alpha(if (isEnabled) 1f else 0.5f)
         ) {
-            if (isEnabled && isFilled) {
-                Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = ""
-                )
+            Icon(
+                painter = icon,
+                contentDescription = "",
+                tint = Color.White,
+                modifier = Modifier.padding(8.dp)
+            )
+
+            Text(
+                text = text,
+                color = Color.White,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Box(
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .size(24.dp)
+                    .background(color = if (isFilled) yellow500 else Color.Transparent, shape = CircleShape)
+                    .border(
+                        width = 1.dp, color = black300, shape = CircleShape
+                    )
+                    .padding(4.dp)
+            ) {
+                if (isEnabled && isFilled) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = ""
+                    )
+                }
             }
         }
     }
-}
 
-@Preview
-@Composable
-fun FormFieldPreview() {
-    Column {
-        FormField(
-            icon = painterResource(id = R.drawable.ic_group),
-            text = "Nirvana",
-            isEnabled = true,
-            isFilled = true,
-            onClick = {}
-        )
+    @Preview
+    @Composable
+    fun FormFieldPreview() {
+        Column {
+            FormField(
+                icon = painterResource(id = R.drawable.ic_group),
+                text = "Nirvana",
+                isEnabled = true,
+                isFilled = true,
+                onClick = {}
+            )
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
 
-        FormField(
-            icon = painterResource(id = R.drawable.ic_record),
-            text = "Select an album",
-            isEnabled = true,
-            isFilled = false,
-            onClick = {}
-        )
+            FormField(
+                icon = painterResource(id = R.drawable.ic_record),
+                text = "Select an album",
+                isEnabled = true,
+                isFilled = false,
+                onClick = {}
+            )
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-        FormField(
-            icon = painterResource(id = R.drawable.ic_song),
-            text = "Select a song",
-            isEnabled = false,
-            isFilled = false,
-            onClick = {}
-        )
+            FormField(
+                icon = painterResource(id = R.drawable.ic_song),
+                text = "Select a song",
+                isEnabled = false,
+                isFilled = false,
+                onClick = {}
+            )
+        }
     }
 }

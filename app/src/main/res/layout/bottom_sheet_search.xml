@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet"
+    android:minHeight="256dp"
+    android:orientation="vertical"
+    android:paddingBottom="16dp">
+
+    <!--  // TODO 8.1 (S) Fix layout dle prezentace -->
+    <!--  // TODO 8.2 (S) Stačí pouze správně použít Constraints -->
+
+    <EditText
+        android:id="@+id/search_query_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="4dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_edit_text"
+        android:hint="@string/enter_search_text"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:padding="12dp"
+        tools:ignore="Autofill" />
+
+    <ImageButton
+        android:id="@+id/search_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_weight="5"
+        android:background="@drawable/bg_edit_text"
+        android:backgroundTint="@color/yellow_500"
+        android:foreground="?selectableItemBackground"
+        android:src="@drawable/ic_search"
+        android:visibility="visible"
+        app:tint="@color/black_500"
+        tools:ignore="ContentDescription" />
+
+    <ProgressBar
+        android:id="@+id/search_button_progress_bar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/white_500"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/item_list" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
