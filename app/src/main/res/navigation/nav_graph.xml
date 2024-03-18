@@ -20,9 +20,23 @@
     <fragment
         android:id="@+id/searchLyricsFragment"
         android:name="com.maderajan.muni.lyricsseach.ui.searchlyrics.SearchLyricsFragment"
-        android:label="SearchLyricsFragment" />
+        android:label="SearchLyricsFragment" >
 
-    <!--    TODO 1.1 (S) Add Search Bottom -->
-    <!--    TODO 1.2 (S) Add Action With Safe Args -->
+        <action
+            android:id="@+id/action_searchLyricsFragment_to_searchBottomSheet"
+            app:destination="@id/searchBottomSheet" />
+
+    </fragment>
+
+    <dialog
+        android:id="@+id/searchBottomSheet"
+        android:name="com.maderajan.muni.lyricsseach.ui.search.SearchBottomSheet"
+        android:label="SearchBottomSheet" >
+
+        <argument
+            android:name="searchType"
+            app:argType="com.maderajan.muni.lyricsseach.data.SearchType" />
+
+    </dialog>
 
 </navigation>

@@ -9,9 +9,6 @@
     android:orientation="vertical"
     android:paddingBottom="16dp">
 
-    <!--  // TODO 3.3 (S) Fix layout dle prezentace -->
-    <!--  // TODO 3.4 (S) Stačí pouze správně použít Constraints -->
-
     <EditText
         android:id="@+id/search_query_edit_text"
         android:layout_width="0dp"
@@ -25,6 +22,9 @@
         android:imeOptions="actionDone"
         android:inputType="text"
         android:padding="12dp"
+        app:layout_constraintEnd_toStartOf="@id/search_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="Autofill" />
 
     <ImageButton
@@ -39,6 +39,8 @@
         android:foreground="?selectableItemBackground"
         android:src="@drawable/ic_search"
         android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/search_query_edit_text"
         app:tint="@color/black_500"
         tools:ignore="ContentDescription" />
 
@@ -49,12 +51,17 @@
         android:layout_gravity="center"
         android:indeterminateTint="@color/white_500"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/search_button"
+        app:layout_constraintEnd_toEndOf="@id/search_button"
+        app:layout_constraintStart_toStartOf="@id/search_button"
+        app:layout_constraintTop_toTopOf="@id/search_button"
         tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/search_query_edit_text"
         tools:listitem="@layout/item_list" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.navigation.fragment.findNavController
 import com.maderajan.muni.lyricsseach.R
 import com.maderajan.muni.lyricsseach.data.SearchResult
 import com.maderajan.muni.lyricsseach.data.SearchType
@@ -121,10 +122,13 @@ class SearchLyricsFragment : Fragment() {
         }
 
     private fun navigateToSearch(searchType: SearchType) {
-        //  TODO 2.1 (S) Navigation with SearchType
+        findNavController()
+            .navigate(
+                SearchLyricsFragmentDirections
+                    .actionSearchLyricsFragmentToSearchBottomSheet(searchType = searchType)
+            )
     }
 
-    // TODO 2.2 Naslouchání nad Resultem
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
