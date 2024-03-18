@@ -9,8 +9,8 @@
     android:orientation="vertical"
     android:paddingBottom="16dp">
 
-    <!--  // TODO 8.1 (S) Fix layout dle prezentace -->
-    <!--  // TODO 8.2 (S) Stačí pouze správně použít Constraints -->
+    <!--  // TODO 3.3 (S) Fix layout dle prezentace -->
+    <!--  // TODO 3.4 (S) Stačí pouze správně použít Constraints -->
 
     <EditText
         android:id="@+id/search_query_edit_text"
