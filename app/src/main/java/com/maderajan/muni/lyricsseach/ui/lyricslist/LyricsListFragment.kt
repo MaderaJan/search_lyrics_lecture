@@ -14,6 +14,9 @@ import com.maderajan.muni.lyricsseach.repository.LyricsRepository
 class LyricsListFragment : Fragment() {
 
     private lateinit var binding: FragmentLyricsListBinding
+    private val lyricsRepository: LyricsRepository by lazy {
+        LyricsRepository(requireContext())
+    }
 
     private val adapter = LyricsAdapter(
         onClick = { lyrics ->
@@ -37,8 +40,11 @@ class LyricsListFragment : Fragment() {
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
+    }
 
-        val lyricsRepository = LyricsRepository()
-        adapter.submitList(lyricsRepository.getFakeLyrics())
+    override fun onResume() {
+        super.onResume()
+
+        adapter.submitList(lyricsRepository.getAllLyrics())
     }
 }

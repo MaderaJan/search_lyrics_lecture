@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -40,14 +41,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.maderajan.muni.lyricsseach.R
+import com.maderajan.muni.lyricsseach.data.LyricsData
 import com.maderajan.muni.lyricsseach.data.SearchResult
 import com.maderajan.muni.lyricsseach.data.SearchType
+import com.maderajan.muni.lyricsseach.repository.SearchRepository
 import com.maderajan.muni.lyricsseach.ui.search.SearchBottomSheet
 import com.maderajan.muni.lyricsseach.ui.theme.black300
 import com.maderajan.muni.lyricsseach.ui.theme.yellow500
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class SearchLyricsFragment : Fragment() {
+
+    private val searchRepository: SearchRepository by lazy {
+        SearchRepository()
+    }
 
     private val artistFlow = MutableStateFlow<SearchResult?>(null)
     private val albumFlow = MutableStateFlow<SearchResult?>(null)
@@ -83,7 +90,7 @@ class SearchLyricsFragment : Fragment() {
                         isEnabled = artist != null,
                         isFilled = album != null,
                         onClick = {
-                            navigateToSearch(SearchType.ALBUM)
+                            navigateToSearch(SearchType.ALBUM, query = artist?.id)
                         }
                     )
 
@@ -95,7 +102,7 @@ class SearchLyricsFragment : Fragment() {
                         isEnabled = artist != null && album != null,
                         isFilled = song != null,
                         onClick = {
-                            navigateToSearch(SearchType.SONGS)
+                            navigateToSearch(SearchType.SONGS, query = album?.id)
                         }
                     )
 
@@ -108,6 +115,7 @@ class SearchLyricsFragment : Fragment() {
                         ),
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
+                            searchSongLyrics(artist, song, album)
                         },
                         enabled = artist != null && album != null && song != null
                     ) {
@@ -115,18 +123,48 @@ class SearchLyricsFragment : Fragment() {
                             text = stringResource(id = R.string.search_form_get_lyrics),
                             color = Color.Black
                         )
-
                     }
                 }
             }
         }
 
-    private fun navigateToSearch(searchType: SearchType) {
+
+    private fun navigateToSearch(searchType: SearchType, query: String? = null) {
         findNavController()
             .navigate(
                 SearchLyricsFragmentDirections
-                    .actionSearchLyricsFragmentToSearchBottomSheet(searchType = searchType)
+                    .actionSearchLyricsFragmentToSearchBottomSheet(searchType = searchType, query = query)
             )
+    }
+
+    private fun searchSongLyrics(
+        artist: SearchResult?,
+        song: SearchResult?,
+        album: SearchResult?
+    ) {
+        searchRepository.searchLyrics(
+            artistName = artist?.name.orEmpty(),
+            songName = song?.name.orEmpty(),
+            success = { lyrics ->
+                if (song != null && artist != null && lyrics != null) {
+                    val lyricsData = LyricsData(
+                        id = song.id,
+                        songName = song.name,
+                        artistName = artist.name,
+                        coverUrl = album?.imageUrl,
+                        lyrics = lyrics,
+                        isFavorite = false
+                    )
+
+                    // TODO 4.2 (S) Odkomentovat
+//                    findNavController()
+//                        .navigate(SearchLyricsFragmentDirections.actionSearchLyricsFragmentToLyricsBottomSheet(lyrics = lyricsData))
+                }
+            },
+            fail = {
+                Toast.makeText(requireContext(), getString(R.string.nothing_was_found), Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

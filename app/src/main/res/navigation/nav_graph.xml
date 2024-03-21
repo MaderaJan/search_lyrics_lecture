@@ -37,6 +37,11 @@
             android:name="searchType"
             app:argType="com.maderajan.muni.lyricsseach.data.SearchType" />
 
+        <argument
+            android:name="query"
+            app:argType="string"
+            app:nullable="true" />
+
     </dialog>
 
 </navigation>

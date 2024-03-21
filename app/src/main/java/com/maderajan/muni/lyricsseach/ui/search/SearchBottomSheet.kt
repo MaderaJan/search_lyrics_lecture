@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.maderajan.muni.lyricsseach.R
 import com.maderajan.muni.lyricsseach.data.SearchType
 import com.maderajan.muni.lyricsseach.databinding.BottomSheetSearchBinding
 import com.maderajan.muni.lyricsseach.repository.SearchRepository
@@ -60,11 +62,20 @@ class SearchBottomSheet : BottomSheetDialogFragment() {
     private fun search() {
         toggleSearch(showProgressBar = true)
 
-        searchRepository.fakeSearch(type = args.searchType, success = { result ->
-            adapter.submitList(result)
+        val query = when (args.searchType) {
+            SearchType.ARTIST -> binding.searchQueryEditText.text.toString()
+            SearchType.ALBUM, SearchType.SONGS -> args.query.orEmpty()
+        }
 
-            toggleSearch(showProgressBar = false)
-        })
+        // TODO 3.1 Search change
+        searchRepository.search(type = args.searchType, query = query,
+            success = {
+                adapter.submitList(it)
+                toggleSearch(showProgressBar = false)
+            }, fail = {
+                Toast.makeText(requireContext(), getString(R.string.nothing_was_found), Toast.LENGTH_SHORT).show()
+                toggleSearch(showProgressBar = false)
+            })
     }
 
     private fun toggleSearch(showProgressBar: Boolean) {
