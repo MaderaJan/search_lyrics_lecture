@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.maderajan.muni.lyricsseach.data.LyricsData
 
-// TODO 1.2 Database
 @Database(
     entities = [LyricsData::class],
     version = 1

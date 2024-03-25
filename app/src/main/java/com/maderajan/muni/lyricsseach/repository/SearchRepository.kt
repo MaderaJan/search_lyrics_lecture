@@ -5,19 +5,19 @@ import com.maderajan.muni.lyricsseach.data.SearchType
 import com.maderajan.muni.lyricsseach.webservice.DeezerWebService
 import com.maderajan.muni.lyricsseach.webservice.LyricsWebService
 import com.maderajan.muni.lyricsseach.webservice.RetrofitUtil
+import com.maderajan.muni.lyricsseach.webservice.response.AlbumSongsResponse
+import com.maderajan.muni.lyricsseach.webservice.response.ArtistAlbumsResponse
 import com.maderajan.muni.lyricsseach.webservice.response.LyricsResponse
 import com.maderajan.muni.lyricsseach.webservice.response.SearchResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-// TODO 3.3 Inicializace REST API
 class SearchRepository(
     private val lyricsWebService: LyricsWebService = RetrofitUtil.createLyricsService(),
     private val deezerWebService: DeezerWebService = RetrofitUtil.createDeezerService()
 ) {
 
-    // TODO 3.2 Search change
     fun search(type: SearchType, query: String, success: (List<SearchResult>) -> Unit, fail: () -> Unit) {
         when(type) {
             SearchType.ARTIST -> searchArtist(query, success, fail)
@@ -50,13 +50,49 @@ class SearchRepository(
     }
 
     private fun searchAlbum(artistId: String, success: (List<SearchResult>) -> Unit, fail: () -> Unit) {
-        // TODO 5.1 (S) Search Album z API
-        // TODO 5.1 (S) deezerWebService.getAlbumsByArtistId(artistId)
+        deezerWebService.getAlbumsByArtistId(artistId)
+            .enqueue(object : Callback<ArtistAlbumsResponse> {
+                override fun onResponse(call: Call<ArtistAlbumsResponse>, response: Response<ArtistAlbumsResponse>) {
+                    if (response.isSuccessful) {
+                        val searchResponse = response.body()
+
+                        val result = searchResponse?.data?.map {
+                            SearchResult(id = it.id, name = it.title, imageUrl = it.cover_small)
+                        } ?: emptyList()
+
+                        success(result)
+                    } else {
+                        fail()
+                    }
+                }
+
+                override fun onFailure(call: Call<ArtistAlbumsResponse>, t: Throwable) {
+                    fail()
+                }
+            })
     }
 
     private fun searchSong(albumId: String, success: (List<SearchResult>) -> Unit, fail: () -> Unit) {
-        // TODO 5.2 (S) Search Song z API
-        // TODO 5.2 (S) deezerWebService.getAlbumSongsById(albumId)
+        deezerWebService.getAlbumSongsById(albumId)
+            .enqueue(object : Callback<AlbumSongsResponse> {
+                override fun onResponse(call: Call<AlbumSongsResponse>, response: Response<AlbumSongsResponse>) {
+                    if (response.isSuccessful) {
+                        val searchResponse = response.body()
+
+                        val result = searchResponse?.tracks?.data?.map {
+                            SearchResult(id = it.id, name = it.title, imageUrl = null)
+                        } ?: emptyList()
+
+                        success(result)
+                    } else {
+                        fail()
+                    }
+                }
+
+                override fun onFailure(call: Call<AlbumSongsResponse>, t: Throwable) {
+                    fail()
+                }
+            })
     }
 
     fun searchLyrics(artistName: String, songName: String, success: (String?) -> Unit, fail: () -> Unit) {

@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.maderajan.muni.lyricsseach.data.LyricsData
 
-// TODO 1.2 Dao
 @Dao
 interface LyricsDataDao {
 

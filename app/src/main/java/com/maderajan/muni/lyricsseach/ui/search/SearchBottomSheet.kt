@@ -67,7 +67,6 @@ class SearchBottomSheet : BottomSheetDialogFragment() {
             SearchType.ALBUM, SearchType.SONGS -> args.query.orEmpty()
         }
 
-        // TODO 3.1 Search change
         searchRepository.search(type = args.searchType, query = query,
             success = {
                 adapter.submitList(it)

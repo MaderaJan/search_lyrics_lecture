@@ -5,7 +5,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-// TODO 2.3 RetrofitUtil
 object RetrofitUtil {
 
     private const val LYRICS_BASE_URL = "https://api.lyrics.ovh/v1/"

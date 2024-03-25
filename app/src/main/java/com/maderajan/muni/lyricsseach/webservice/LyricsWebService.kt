@@ -5,7 +5,6 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-// TODO 2.2 LyricsWebService
 interface LyricsWebService {
 
     @GET("{artistName}/{songName}")

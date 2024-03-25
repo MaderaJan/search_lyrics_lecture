@@ -41,7 +41,19 @@
             android:name="query"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_searchBottomSheet_to_lyricsBottomSheet2"
+            app:destination="@id/lyricsBottomSheet" />
 
+    </dialog>
+
+    <dialog
+        android:id="@+id/lyricsBottomSheet"
+        android:name="com.maderajan.muni.lyricsseach.ui.lyrics.LyricsBottomSheet"
+        android:label="LyricsBottomSheet" >
+        <argument
+            android:name="lyrics"
+            app:argType="com.maderajan.muni.lyricsseach.data.LyricsData" />
     </dialog>
 
 </navigation>
