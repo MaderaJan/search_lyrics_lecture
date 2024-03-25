@@ -81,7 +81,8 @@ class LyricsBottomSheet : BottomSheetDialogFragment() {
 
                     TopBar(
                         lyricsData = lyricsData,
-                        onArrowBackClick = { this@LyricsBottomSheet.findNavController().navigateUp()
+                        onArrowBackClick = {
+                            this@LyricsBottomSheet.findNavController().navigateUp()
                         },
                         onFavoriteClick = {
                             val updatedIsFavorite = lyricsRepository.insertOrDeleteLyrics(lyricsData)

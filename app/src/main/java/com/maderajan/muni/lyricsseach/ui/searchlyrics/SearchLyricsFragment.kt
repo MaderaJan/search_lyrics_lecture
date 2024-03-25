@@ -156,9 +156,8 @@ class SearchLyricsFragment : Fragment() {
                         isFavorite = false
                     )
 
-                    // TODO 4.2 (S) Odkomentovat
-//                    findNavController()
-//                        .navigate(SearchLyricsFragmentDirections.actionSearchLyricsFragmentToLyricsBottomSheet(lyrics = lyricsData))
+                    findNavController()
+                        .navigate(SearchLyricsFragmentDirections.actionSearchBottomSheetToLyricsBottomSheet(lyrics = lyricsData))
                 }
             },
             fail = {

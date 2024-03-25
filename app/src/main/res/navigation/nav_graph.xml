@@ -26,6 +26,10 @@
             android:id="@+id/action_searchLyricsFragment_to_searchBottomSheet"
             app:destination="@id/searchBottomSheet" />
 
+        <action
+            android:id="@+id/action_searchBottomSheet_to_lyricsBottomSheet"
+            app:destination="@id/lyricsBottomSheet" />
+
     </fragment>
 
     <dialog
@@ -41,9 +45,6 @@
             android:name="query"
             app:argType="string"
             app:nullable="true" />
-        <action
-            android:id="@+id/action_searchBottomSheet_to_lyricsBottomSheet2"
-            app:destination="@id/lyricsBottomSheet" />
 
     </dialog>
 
@@ -51,6 +52,7 @@
         android:id="@+id/lyricsBottomSheet"
         android:name="com.maderajan.muni.lyricsseach.ui.lyrics.LyricsBottomSheet"
         android:label="LyricsBottomSheet" >
+
         <argument
             android:name="lyrics"
             app:argType="com.maderajan.muni.lyricsseach.data.LyricsData" />
